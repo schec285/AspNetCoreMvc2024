@@ -31,8 +31,12 @@ namespace MyApp.Namespace
             using (var reader = new FileStream(this.source, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (var writer = new FileStream(this.source, FileMode.Open, FileAccess.Write, FileShare.ReadWrite)) {
                 var list = JsonSerializer.Deserialize<List<UserData>>(reader);
-                userData.No = (list.Max(x => x.No) + 1);
-                list.Add(userData);
+                if(list == null || list.Count == 0){
+		    userData.No = 1;
+		}else{
+		    userData.No = (list.Max(x => x.No) + 1);
+		}
+		list.Add(userData);
                 writer.SetLength(0);
                 JsonSerializer.Serialize(writer, list);
             };
